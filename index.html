@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>POC Vinci Folders</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="title">Vinci Folders</div>
+  <div class="menu-bar">
+    <div><button id="login" disabled>Entrar</button></div>
+    <div id="menu-botoes" style="display: none;">
+      <button id="logout">Sair</button>
+      <!-- <button id="refresh">Atualizar</button> -->
+      <button id="createFolders">Nova Pasta</button>
+      <!-- <button id="uploadFile">Enviar Arquivo</button> -->
+      <button id="back" style="display: none;">Voltar</button>
+      <!-- <button onclick="window.open('https://drive.google.com/drive/folders/1pBr6TK9AYbHiXScittiljtfTKUUlXCzC', '_blank');">Google Drive</button> -->
+    </div>
+  </div>
+  <hr>
+  <div id="list-files" style="display: none;">
+    <div id="path">
+      <a href="#/">vinci-folders</a>
+    </div>
+    <hr>
+    <div>Nome</div>
+    <div id="files"></div>
+    <div>
+        <br>
+        Adicionar um arquivo: <br>
+        <input type="file" id="uploadFile" style="width: 500px;"><br>
+        <span id="uploadMessage"></span>
+    </div>
+  </div>
+  <div id="new-folders" style="display: none;">
+    <form>
+      <div>
+        <label>MSN</label>
+      </div>
+      <div>
+        <input type="text" id="msn" placeholder="MSN">
+      </div>
+      <div style="padding-top: 10px;">
+        <label>Matrícula</label>
+      </div>
+      <div>
+        <input type="text" id="matricula" placeholder="Matrícula">
+      </div>
+      <div style="padding-top: 15px;">
+        <button id="createFolders2" type="button">Gerar Pastas</button>
+      </div>
+      <div id="createFoldersResponse" style="padding-top: 15px;">
+      </div>
+    </form>
+  </div>
+
+  <script src="index.js" type="module"></script>
+</body>
+
+</html>

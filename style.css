@@ -1,0 +1,30 @@
+* {
+    box-sizing: border-box;
+}
+
+.title {
+    float: left;
+    font-weight: bold;
+    font-size: larger;
+}
+
+.menu-bar {
+    width: 100%; 
+    text-align: right; 
+    padding: 0 5px;
+}
+
+.menu-bar>div {
+    display: inline-block;
+}
+
+#files {
+    margin-top: 5px;
+}
+
+a:link, a:visited {
+    color: black;
+}
+    
+
+ 

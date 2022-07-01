@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Demonstração de uso da api</title>
+</head>
+
+<body>
+    <h2>Demonstração de uso da API de acesso ao Google Drive</h2>
+    <div id="content"></div>
+
+    <script type="module">
+        import * as drive from './drive.js';
+        log('API drive.js importada!');
+
+        try {
+            await drive.loadGoogleApis();
+        } catch (err) {
+            log('Problema carregando as APIS do Google: ' + err);
+            throw err;
+        }
+        log('APIs do Google carregadas');
+
+        log('');
+        log('Clique no botão abaixo para logar na conta do google:');
+        await new Promise((resolve, reject) => {
+            let but = document.createElement('button');
+            but.textContent = 'Login';
+            but.onclick = () => {
+                but.disabled = true;
+                resolve();
+            }
+            document.querySelector('#content').append(but);
+            log('');
+        });
+
+        try {
+            await drive.login();
+        } catch (err) {
+            log('Problema fazendo login na conta do Google: ' + err);
+            throw err;
+        }
+        log('Login feito na conta do google');
+
+        // let msn = 624;
+        let msn = Math.floor(Math.random() * 899) + 100;
+        log('');
+        log(`Criando as pastas para msn: ${msn}, matricula: AA-PCX na pasta vinci-folders dentro do seu google drive. Procedimento demorado, aguarde...`);
+        await drive.createVinciFolders(msn, 'AA-PCX');
+        log('Pastas criadas');
+
+        log('');
+        log(`Listando o conteudo da pasta vinci-folders/${msn}/AA-PCX`);
+        let files = await drive.listFilesInPath(`/${msn}/AA-PCX`);
+        for (let file of files) {
+            log(`name: ${file.name} | id: ${file.id}`);
+        }
+
+        log('');
+        log(`Clique no botão abaixo para fazer o upload de um arquivo para a pasta vinci-folders/${msn}/AA-PCX/${msn}.AA-PCX.INSPECTION`);
+        let file = await new Promise((resolve, reject) => {
+            let but = document.createElement('input');
+            but.type = 'file';
+            but.onchange = (event) => {
+                but.disabled = true;
+                resolve(event?.srcElement?.files[0]);
+            }
+            document.querySelector('#content').append(but);
+            log('');
+        });
+        if (file == null) {
+            log('Você precisa escolher um arquivo!');
+        };
+        log('Enviando arquivo...');
+        let fileId = await drive.uploadToPath(file, `/${msn}/AA-PCX/${msn}.AA-PCX.INSPECTION`);
+        log('Arquivo enviado: id = ' + fileId);
+
+        log('');
+        log('Clique no link abaixo para fazer o download do arquivo de id = ' + fileId);
+        await new Promise((resolve, reject) => {
+            let a = document.createElement('a');
+            a.href = '#';
+            a.textContent = file.name;
+            a.onclick = () => {
+                console.log('clicou no a');
+                resolve();
+            };
+            document.querySelector('#content').append(a);
+            log('');
+        });        
+
+        let blob = await drive.downloadFile(fileId);
+        
+        let downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = file.name;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        URL.revokeObjectURL(downloadLink.href);
+
+        log('Fim da demonstração!');
+
+        function log(text) {
+            let logger = document.querySelector('#content');
+            logger.insertAdjacentHTML('beforeend', text + '<br>');
+        }
+    </script>
+</body>
+
+</html>
